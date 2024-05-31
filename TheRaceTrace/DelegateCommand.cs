@@ -15,9 +15,11 @@ namespace TheRaceTrace
         {
             _executeAction = executeAction;
         }
-
+         
         public void Execute(object? parameter) => _executeAction(parameter);
 
-        public
+        public bool CanExecute(object? parameter) => true;
+
+        public event EventHandler? CanExecuteChanged;
     }
 }
