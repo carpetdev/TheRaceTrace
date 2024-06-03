@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace TheRaceTrace
 {
-    internal class DelegateCommand(Action<object?> executeAction) : ICommand
+    public class DelegateCommand(Action<object?> executeAction) : ICommand
     {
         private readonly Action<object?> _executeAction = executeAction;
 

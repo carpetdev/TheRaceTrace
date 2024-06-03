@@ -14,11 +14,11 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="206*"/>
-            <RowDefinition Height="101*"/>
+            <RowDefinition Height="100*"/>
             <RowDefinition Height="127*"/>
         </Grid.RowDefinitions>
         <TextBlock x:Name="textBlock" TextWrapping="Wrap" Text="bruh" Margin="258,137,284,52" Grid.Column="2"/>
-        <Button x:Name="button" Content="Display" HorizontalAlignment="Left" Margin="283,19,0,0" VerticalAlignment="Top" Height="20" Width="42" Grid.Column="2" Grid.Row="1"/>
+        <Button x:Name="button" Command="{Binding Path=GetLapTimesCommand}" Content="GOGOGO" HorizontalAlignment="Left" Margin="283,19,0,0" VerticalAlignment="Top" Height="20" Width="42" Grid.Column="2" Grid.Row="1"/>
 
     </Grid>
 </Window>

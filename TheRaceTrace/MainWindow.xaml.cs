@@ -16,8 +16,9 @@ namespace TheRaceTrace
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        public MainWindow(ViewModel viewModel)
         {
+            DataContext = viewModel;
             InitializeComponent();
         }
     }
