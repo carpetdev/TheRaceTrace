@@ -7,15 +7,10 @@ using System.Windows.Input;
 
 namespace TheRaceTrace
 {
-    internal class DelegateCommand : ICommand
+    internal class DelegateCommand(Action<object?> executeAction) : ICommand
     {
-        private readonly Action<object> _executeAction;
+        private readonly Action<object?> _executeAction = executeAction;
 
-        public DelegateCommand(Action<object> executeAction)
-        {
-            _executeAction = executeAction;
-        }
-         
         public void Execute(object? parameter) => _executeAction(parameter);
 
         public bool CanExecute(object? parameter) => true;

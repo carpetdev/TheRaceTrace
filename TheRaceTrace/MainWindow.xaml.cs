@@ -20,17 +20,5 @@ namespace TheRaceTrace
         {
             InitializeComponent();
         }
-
-        private void button_Click(object sender, RoutedEventArgs e)
-        {
-            if (helloButton.IsChecked == true)
-            {
-                MessageBox.Show("yoyoyo");
-            }
-            else if (cyaButton.IsChecked == true)
-            {
-                MessageBox.Show("get lost");
-            }
-        }
     }
 }

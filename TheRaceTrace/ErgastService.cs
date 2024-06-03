@@ -11,14 +11,14 @@ namespace TheRaceTrace
 {
     internal class ErgastService
     {
-        //public static Dictionary<int, List<LapTime>> GetLapTimes()
-        public static void GetLapTimes()
+        // CA1822 will go when I add interfaces apparently
+        //public Dictionary<int, List<LapTime>> GetLapTimes()
+        public void GetLapTimes()
         {
-            using (StreamReader r = new StreamReader("06Monaco19.json"))
+            using (StreamReader r = new("06Monaco19.json"))
             {
                 string json = r.ReadToEnd();
                 dynamic? data = JsonConvert.DeserializeObject(json);
-                Debug.WriteLine(data);
             }
         }
     }
