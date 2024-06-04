@@ -15,7 +15,8 @@ namespace TheRaceTrace
     public class ErgastService
     {
         // CA1822 will go when I add interfaces apparently
-        public Dictionary<int, LapTime[]> GetLapTimes()
+        // Maybe validate the data (eg no missing laps etc)
+        public SortedDictionary<int, LapTime[]> GetLapTimes()
         {
             JsonSerializerOptions options = new()
             {
@@ -23,11 +24,11 @@ namespace TheRaceTrace
                 NumberHandling = JsonNumberHandling.AllowReadingFromString,
                 Converters = { new TimeSpanConverter() },
             };
-            Dictionary<int, LapTime[]> lapTimesByLap = [];
+            SortedDictionary<int, LapTime[]> lapTimesByLap = [];
             string file = "06Monaco19.json";
             string json = File.ReadAllText(file);
             JsonNode data = JsonNode.Parse(json)!;
-            foreach (var lap in data!["MRData"]!["RaceTable"]!["Races"]![0]!["Laps"]!.AsArray())
+            foreach (JsonNode? lap in data!["MRData"]!["RaceTable"]!["Races"]![0]!["Laps"]!.AsArray())
             {
                 lapTimesByLap[int.Parse(lap!["number"]!.GetValue<string>())] = JsonSerializer.Deserialize<LapTime[]>(lap["Timings"], options)!;
             }

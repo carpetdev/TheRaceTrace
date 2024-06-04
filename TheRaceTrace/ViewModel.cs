@@ -13,52 +13,29 @@ namespace TheRaceTrace
     {
         private readonly DelegateCommand _getLapTimesCommand;
         private readonly ErgastService _ergastService;
+        private readonly ChartService _chartService;
 
-        private Dictionary<int, LapTime[]>? _lapTimesByLap;
+        private PlotModel? _plot;
 
-        public ViewModel(ErgastService ergastService)
+        public ViewModel(ErgastService ergastService, ChartService chartService)
         {
             _getLapTimesCommand = new DelegateCommand(OnGetLapTimes);
             _ergastService = ergastService;
-
-            Plot = new PlotModel
-            {
-                Series =
-                {
-                    CreateSeries("Series 1"),
-                    CreateSeries("Series 2"),
-                    CreateSeries("Series 3")
-                }
-            };
+            _chartService = chartService;
         }
 
         public ICommand GetLapTimesCommand => _getLapTimesCommand;
 
-        public Dictionary<int, LapTime[]>? LapTimesByLap
+        public PlotModel? Plot
         {
-            get => _lapTimesByLap;
-            set => SetProperty(ref _lapTimesByLap, value);
-        }
-
-        public PlotModel Plot { get; }
-
-        private static LineSeries CreateSeries(string name)
-        {
-            return new LineSeries
-            {
-                Title = name,
-                Points =
-                {
-                    new(0, 0),
-                    new(1, 1),
-                    new(2, 2)
-                }
-            };
+            get => _plot;
+            set => SetProperty(ref _plot, value);
         }
 
         private void OnGetLapTimes(object? commandParameter)
         {
-            LapTimesByLap = _ergastService.GetLapTimes();
+            SortedDictionary<int, LapTime[]> lapTimesByLap = _ergastService.GetLapTimes();
+            Plot = _chartService.CreateTrace(lapTimesByLap);
         }
 
     }

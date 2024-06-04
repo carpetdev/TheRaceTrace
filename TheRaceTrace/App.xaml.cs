@@ -16,6 +16,7 @@ namespace TheRaceTrace
             services.AddScoped<MainWindow>();
             services.AddScoped<ViewModel>();
             services.AddScoped<ErgastService>();
+            services.AddScoped<ChartService>();
 
             ServiceProvider serviceProvider = services.BuildServiceProvider();
             serviceProvider.GetRequiredService<MainWindow>().Show();
