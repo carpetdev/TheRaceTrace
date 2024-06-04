@@ -15,6 +15,7 @@ namespace TheRaceTrace
 
         public bool CanExecute(object? parameter) => true;
 
+        // TODO Will use to prevent DDOSing ergast
         public event EventHandler? CanExecuteChanged;
     }
 }

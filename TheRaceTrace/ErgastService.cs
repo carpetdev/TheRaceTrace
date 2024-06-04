@@ -14,8 +14,8 @@ namespace TheRaceTrace
 {
     public class ErgastService
     {
-        // CA1822 will go when I add interfaces apparently
-        // Maybe validate the data (eg no missing laps etc)
+        // TODO CA1822 will go when I add interfaces apparently
+        // TODO Maybe validate the data (eg no missing laps etc)
         public SortedDictionary<int, LapTime[]> GetLapTimes()
         {
             JsonSerializerOptions options = new()
