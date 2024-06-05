@@ -26,6 +26,7 @@ namespace TheRaceTrace.Services
             SortedDictionary<int, LapTime[]> lapTimesByLap = [];
 
             HttpClient client = new();
+            // TODO: Maybe this should be another service/method so it can be mocked?
             HttpResponseMessage response = client.GetAsync("http://ergast.com/api/f1/current/last/laps.json?limit=2000").Result;
             String json;
             if (!response.IsSuccessStatusCode)

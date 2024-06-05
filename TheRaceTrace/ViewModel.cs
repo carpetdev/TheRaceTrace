@@ -31,6 +31,8 @@ namespace TheRaceTrace
 
         private bool ErgastTimeout { get; set; }
 
+        // TODO: add some indication that the command is running
+        // and also that it has timed out
         private async void OnGetRaceTrace(object? commandParameter)
         {
             RaceData raceData = _ergastService.GetRaceData();
