@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.IO;
+using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
@@ -8,13 +9,13 @@ namespace TheRaceTrace.Services
 {
     public interface IErgastService
     {
-        SortedDictionary<int, LapTime[]> GetLapTimes();
+        RaceData GetRaceData();
     }
 
     public class ErgastService : IErgastService
     {
         // TODO: Maybe validate the data (eg no missing laps etc)
-        public SortedDictionary<int, LapTime[]> GetLapTimes()
+        public RaceData GetRaceData()
         {
             JsonSerializerOptions options = new()
             {
@@ -23,14 +24,22 @@ namespace TheRaceTrace.Services
                 Converters = { new TimeSpanConverter() },
             };
             SortedDictionary<int, LapTime[]> lapTimesByLap = [];
-            string file = "06Monaco19.json";
-            string json = File.ReadAllText(file);
-            JsonNode data = JsonNode.Parse(json)!;
-            foreach (JsonNode? lap in data!["MRData"]!["RaceTable"]!["Races"]![0]!["Laps"]!.AsArray())
+
+            HttpClient client = new();
+            HttpResponseMessage response = client.GetAsync("http://ergast.com/api/f1/current/last/laps.json?limit=2000").Result;
+            if (!response.IsSuccessStatusCode)
+            {
+                // TODO: Custom, more descriptive exception
+                throw new Exception("Ergast is unhappy");
+            }
+            Stream json = response.Content.ReadAsStreamAsync().Result;
+            // TODO: Check the json structure is as expected
+            JsonNode race = JsonNode.Parse(json)!["MRData"]!["RaceTable"]!["Races"]![0]!;
+            foreach (JsonNode? lap in race["Laps"]!.AsArray())
             {
                 lapTimesByLap[int.Parse(lap!["number"]!.GetValue<string>())] = lap["Timings"].Deserialize<LapTime[]>(options)!;
             }
-            return lapTimesByLap;
+            return new RaceData($"{race["season"]!.GetValue<string>()} {race["raceName"]!.GetValue<string>()}", lapTimesByLap);
         }
     }
 

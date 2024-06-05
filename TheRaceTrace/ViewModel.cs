@@ -33,8 +33,8 @@ namespace TheRaceTrace
 
         private async void OnGetRaceTrace(object? commandParameter)
         {
-            SortedDictionary<int, LapTime[]> lapTimesByLap = _ergastService.GetLapTimes();
-            Plot = _chartService.CreateTrace(lapTimesByLap);
+            RaceData raceData = _ergastService.GetRaceData();
+            Plot = _chartService.CreateTrace(raceData);
             ErgastTimeout = true;
             _getRaceTraceCommand.RaiseCanExecuteChanged();
             await Task.Delay(20_000);
@@ -44,4 +44,6 @@ namespace TheRaceTrace
 
         private bool CanGetRaceTrace(object? commandParameter) => !ErgastTimeout;
     }
+
+    public record RaceData(string RaceName, SortedDictionary<int, LapTime[]> LapTimesByLap);
 }

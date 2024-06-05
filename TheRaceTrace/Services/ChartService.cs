@@ -6,13 +6,14 @@ namespace TheRaceTrace.Services
 {
     public interface IChartService
     {
-        PlotModel CreateTrace(SortedDictionary<int, LapTime[]> lapTimesByLap);
+        PlotModel CreateTrace(RaceData raceData);
     }
 
     public class ChartService : IChartService
     {
-        public PlotModel CreateTrace(SortedDictionary<int, LapTime[]> lapTimesByLap)
+        public PlotModel CreateTrace(RaceData raceData)
         {
+            SortedDictionary<int, LapTime[]> lapTimesByLap = raceData.LapTimesByLap;
             int lapCount = lapTimesByLap.Count;
             string winner = lapTimesByLap[lapCount]
                 .MinBy(lapTime => lapTime.Position)!
@@ -49,6 +50,7 @@ namespace TheRaceTrace.Services
                 lineSeries.TrackerFormatString = "Lap {2}: {4:0.###} {0}";
                 plot.Series.Add(lineSeries);
             }
+            plot.Title = raceData.RaceName;
             plot.Legends.Add(new Legend { LegendPlacement = LegendPlacement.Outside });
 
             return plot;
