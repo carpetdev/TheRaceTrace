@@ -4,7 +4,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 
-namespace TheRaceTrace
+namespace TheRaceTrace.Services
 {
     public interface IErgastService
     {
@@ -28,7 +28,7 @@ namespace TheRaceTrace
             JsonNode data = JsonNode.Parse(json)!;
             foreach (JsonNode? lap in data!["MRData"]!["RaceTable"]!["Races"]![0]!["Laps"]!.AsArray())
             {
-                lapTimesByLap[int.Parse(lap!["number"]!.GetValue<string>())] = JsonSerializer.Deserialize<LapTime[]>(lap["Timings"], options)!;
+                lapTimesByLap[int.Parse(lap!["number"]!.GetValue<string>())] = lap["Timings"].Deserialize<LapTime[]>(options)!;
             }
             return lapTimesByLap;
         }

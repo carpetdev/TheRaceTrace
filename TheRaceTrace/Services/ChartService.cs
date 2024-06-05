@@ -2,7 +2,7 @@
 using OxyPlot.Legends;
 using OxyPlot.Series;
 
-namespace TheRaceTrace
+namespace TheRaceTrace.Services
 {
     public interface IChartService
     {
@@ -21,14 +21,14 @@ namespace TheRaceTrace
             double winnerAverageTime = lapTimesByLap.Values
                 .SelectMany(lapTimes => lapTimes)
                 .Where(lapTime => lapTime.DriverId == winner)
-                .Select(lapTime => (lapTime.Time).TotalSeconds)
+                .Select(lapTime => lapTime.Time.TotalSeconds)
                 .Average();
 
             Dictionary<string, LineSeries> seriesByDriver = lapTimesByLap[1]
                 .Select(lapTime => new LineSeries
                 {
                     Title = lapTime.DriverId,
-                    Points = { new(0,0) }
+                    Points = { new(0, 0) }
                 })
                 .ToDictionary(lineSeries => lineSeries.Title);
 
