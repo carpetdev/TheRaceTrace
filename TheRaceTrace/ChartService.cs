@@ -1,16 +1,15 @@
 ﻿using OxyPlot;
 using OxyPlot.Legends;
 using OxyPlot.Series;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TheRaceTrace
 {
-    public class ChartService
+    public interface IChartService
+    {
+        PlotModel CreateTrace(SortedDictionary<int, LapTime[]> lapTimesByLap);
+    }
+
+    public class ChartService : IChartService
     {
         public PlotModel CreateTrace(SortedDictionary<int, LapTime[]> lapTimesByLap)
         {

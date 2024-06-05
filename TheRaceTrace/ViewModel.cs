@@ -1,22 +1,18 @@
-﻿using OxyPlot;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System.Windows.Input;
+
+using OxyPlot;
 
 namespace TheRaceTrace
 {
     public class ViewModel : ViewModelBase
     {
         private readonly DelegateCommand _getRaceTraceCommand;
-        private readonly ErgastService _ergastService;
-        private readonly ChartService _chartService;
+        private readonly IErgastService _ergastService;
+        private readonly IChartService _chartService;
 
         private PlotModel? _plot;
 
-        public ViewModel(ErgastService ergastService, ChartService chartService)
+        public ViewModel(IErgastService ergastService, IChartService chartService)
         {
             _getRaceTraceCommand = new DelegateCommand(OnGetRaceTrace, CanGetRaceTrace);
             _ergastService = ergastService;

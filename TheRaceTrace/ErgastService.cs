@@ -1,21 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
+﻿using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace TheRaceTrace
 {
-    public class ErgastService
+    public interface IErgastService
     {
-        // TODO CA1822 will go when I add interfaces apparently
-        // TODO Maybe validate the data (eg no missing laps etc)
+        SortedDictionary<int, LapTime[]> GetLapTimes();
+    }
+
+    public class ErgastService : IErgastService
+    {
+        // TODO: Maybe validate the data (eg no missing laps etc)
         public SortedDictionary<int, LapTime[]> GetLapTimes()
         {
             JsonSerializerOptions options = new()

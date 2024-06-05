@@ -1,6 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System.Configuration;
-using System.Data;
 using System.Windows;
 
 namespace TheRaceTrace
@@ -15,8 +13,8 @@ namespace TheRaceTrace
             ServiceCollection services = new();
             services.AddScoped<MainWindow>();
             services.AddScoped<ViewModel>();
-            services.AddScoped<ErgastService>();
-            services.AddScoped<ChartService>();
+            services.AddScoped<IErgastService, ErgastService>();
+            services.AddScoped<IChartService, ChartService>();
 
             ServiceProvider serviceProvider = services.BuildServiceProvider();
             serviceProvider.GetRequiredService<MainWindow>().Show();
