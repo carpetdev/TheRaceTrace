@@ -27,12 +27,17 @@ namespace TheRaceTrace.Services
 
             HttpClient client = new();
             HttpResponseMessage response = client.GetAsync("http://ergast.com/api/f1/current/last/laps.json?limit=2000").Result;
+            String json;
             if (!response.IsSuccessStatusCode)
             {
                 // TODO: Custom, more descriptive exception
-                throw new Exception("Ergast is unhappy");
+                //throw new Exception("Ergast is unhappy");
+                json = File.ReadAllText("fallback_data.json");
             }
-            Stream json = response.Content.ReadAsStreamAsync().Result;
+            else
+            {
+                json = response.Content.ReadAsStringAsync().Result;
+            }
             // TODO: Check the json structure is as expected
             JsonNode race = JsonNode.Parse(json)!["MRData"]!["RaceTable"]!["Races"]![0]!;
             foreach (JsonNode? lap in race["Laps"]!.AsArray())
