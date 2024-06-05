@@ -1,4 +1,5 @@
 ﻿using OxyPlot;
+using OxyPlot.Legends;
 using OxyPlot.Series;
 using System;
 using System.Collections.Generic;
@@ -15,8 +16,7 @@ namespace TheRaceTrace
         {
             int lapCount = lapTimesByLap.Count;
             string winner = lapTimesByLap[lapCount]
-                .OrderBy(lapTime => lapTime.Position)
-                .First()
+                .MinBy(lapTime => lapTime.Position)!
                 .DriverId;
 
             double winnerAverageTime = lapTimesByLap.Values
@@ -25,7 +25,7 @@ namespace TheRaceTrace
                 .Select(lapTime => (lapTime.Time).TotalSeconds)
                 .Average();
 
-            Dictionary<string, LineSeries> series = lapTimesByLap[1]
+            Dictionary<string, LineSeries> seriesByDriver = lapTimesByLap[1]
                 .Select(lapTime => new LineSeries
                 {
                     Title = lapTime.DriverId,
@@ -37,17 +37,20 @@ namespace TheRaceTrace
             {
                 foreach (LapTime lapTime in lapTimes)
                 {
-                    double relativeRaceTime = series[lapTime.DriverId].Points[^1].Y + lapTime.Time.TotalSeconds - winnerAverageTime;
-                    series[lapTime.DriverId].Points.Add(new DataPoint(lap, relativeRaceTime));
+                    double relativeRaceTime = seriesByDriver[lapTime.DriverId].Points[^1].Y - lapTime.Time.TotalSeconds + winnerAverageTime;
+                    seriesByDriver[lapTime.DriverId].Points.Add(new DataPoint(lap, relativeRaceTime));
                 }
             }
 
             PlotModel plot = new();
-            foreach (LineSeries lineSeries in series.Values)
+            foreach (LineSeries lineSeries in seriesByDriver.Values)
             {
                 lineSeries.Points.RemoveAt(0);
+                lineSeries.CanTrackerInterpolatePoints = false;
+                lineSeries.TrackerFormatString = "Lap {2}: {4:0.###} {0}";
                 plot.Series.Add(lineSeries);
             }
+            plot.Legends.Add(new Legend { LegendPlacement = LegendPlacement.Outside });
 
             return plot;
         }

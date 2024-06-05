@@ -1,5 +1,4 @@
 ﻿using OxyPlot;
-using OxyPlot.Series;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +10,7 @@ namespace TheRaceTrace
 {
     public class ViewModel : ViewModelBase
     {
-        private readonly DelegateCommand _getLapTimesCommand;
+        private readonly DelegateCommand _getRaceTraceCommand;
         private readonly ErgastService _ergastService;
         private readonly ChartService _chartService;
 
@@ -19,12 +18,12 @@ namespace TheRaceTrace
 
         public ViewModel(ErgastService ergastService, ChartService chartService)
         {
-            _getLapTimesCommand = new DelegateCommand(OnGetLapTimes);
+            _getRaceTraceCommand = new DelegateCommand(OnGetRaceTrace, CanGetRaceTrace);
             _ergastService = ergastService;
             _chartService = chartService;
         }
 
-        public ICommand GetLapTimesCommand => _getLapTimesCommand;
+        public ICommand GetRaceTraceCommand => _getRaceTraceCommand;
 
         public PlotModel? Plot
         {
@@ -32,11 +31,19 @@ namespace TheRaceTrace
             set => SetProperty(ref _plot, value);
         }
 
-        private void OnGetLapTimes(object? commandParameter)
+        private bool ErgastTimeout { get; set; }
+
+        private async void OnGetRaceTrace(object? commandParameter)
         {
             SortedDictionary<int, LapTime[]> lapTimesByLap = _ergastService.GetLapTimes();
             Plot = _chartService.CreateTrace(lapTimesByLap);
+            ErgastTimeout = true;
+            _getRaceTraceCommand.RaiseCanExecuteChanged();
+            await Task.Delay(20_000);
+            ErgastTimeout = false;
+            _getRaceTraceCommand.RaiseCanExecuteChanged();
         }
 
+        private bool CanGetRaceTrace(object? commandParameter) => !ErgastTimeout;
     }
 }

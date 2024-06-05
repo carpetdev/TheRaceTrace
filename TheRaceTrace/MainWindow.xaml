@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Title="MainWindow">
     <Grid>
-        <Button Command="{Binding GetLapTimesCommand}" Content="Create Trace" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="20" Width="74"/>
-        <oxy:PlotView Model="{Binding Plot}" Margin="10,50,10,10"/>
+        <Button Command="{Binding GetRaceTraceCommand}" Content="Create Trace" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="20" Width="74"/>
+        <oxy:PlotView Model="{Binding Plot}" Margin="10,30,10,10"/>
     </Grid>
 </Window>

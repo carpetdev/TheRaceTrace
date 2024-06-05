@@ -40,6 +40,7 @@ namespace TheRaceTrace
 
     public class TimeSpanConverter : JsonConverter<TimeSpan>
     {
+        // TODO: What do when not in this format (lap time over an hour, ergast mistake, etc.)
         public override TimeSpan Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             return TimeSpan.ParseExact(reader.GetString()!, @"%m\:ss\.fff", CultureInfo.InvariantCulture);
